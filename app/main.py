@@ -18,16 +18,13 @@ app = FastAPI()
 
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:3000",
+    "*"
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -44,6 +41,9 @@ def readb64(uri):
    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
    return img
 
+@app.get('/health-check')
+def healthcheck():
+    return {'healthy': 'true'}
 
 @app.post('/')
 async def return_detected(file: str = Form(...)):
